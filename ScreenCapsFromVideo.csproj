@@ -7,6 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <ApplicationIcon>app-icon-symbol.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +15,12 @@
     <Page Remove="ScreenCapsFromVideo.Tests\**\*.xaml" />
     <EmbeddedResource Remove="ScreenCapsFromVideo.Tests\**\*" />
     <None Remove="ScreenCapsFromVideo.Tests\**\*" />
+    <Content Include="app-icon-symbol.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="app-icon-symbol.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

@@ -8,6 +8,7 @@
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
         Background="#F4F6FA"
+        Icon="app-icon-symbol.ico"
         Closing="Window_Closing">
     <Window.Resources>
         <SolidColorBrush x:Key="AccentBrush" Color="#3157C8"/>
