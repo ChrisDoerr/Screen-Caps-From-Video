@@ -42,6 +42,7 @@ _Chutzpah*
 artifacts/
 AppPackages/
 BundleArtifacts/
+ScreenCapsFromVideo-release.zip
 
 # Generated screen caps
 caps/
