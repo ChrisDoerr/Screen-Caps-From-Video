@@ -1,0 +1,53 @@
+# Internal notes
+_notes/
+
+# Build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+[Dd]ebugPublic/
+[Rr]eleases/
+x64/
+x86/
+[Ww]in32/
+[Aa]rm*/
+[Aa]rm64/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.rsuser
+
+# Visual Studio generated files
+Generated\ Files/
+_Chutzpah*
+
+# Test results and coverage
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.coverage
+*.coveragexml
+
+# NuGet
+*.nupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+
+# Publish and packaging output
+[Pp]ublish/
+artifacts/
+AppPackages/
+BundleArtifacts/
+
+# IDEs and local tooling
+.idea/
+.vsconfig.user
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
