@@ -85,3 +85,4 @@ ExampleVideo_00-01-30.jpg
 ## License
 
 This project is provided as-is for local desktop use.
+# Screen-Caps-From-Video
