@@ -1,0 +1,164 @@
+<Window x:Class="ScreenCapsFromVideo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ScreenCapsFromVideo"
+        Width="660"
+        MinWidth="580"
+        SizeToContent="Height"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen"
+        Background="#F4F6FA"
+        Closing="Window_Closing">
+    <Window.Resources>
+        <SolidColorBrush x:Key="AccentBrush" Color="#3157C8"/>
+        <SolidColorBrush x:Key="TextBrush" Color="#202638"/>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="16,0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="28">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,24">
+            <TextBlock FontSize="26" FontWeight="Bold">ScreenCapsFromVideo</TextBlock>
+            <TextBlock Margin="0,6,0,0" Foreground="#687186">
+                Extract JPEG screen caps from a video at regular intervals.
+            </TextBlock>
+        </StackPanel>
+
+        <Border Grid.Row="1" Padding="20" Background="White" CornerRadius="10">
+            <StackPanel>
+                <TextBlock FontWeight="SemiBold" Margin="0,0,0,10">Video file</TextBlock>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="VideoPathTextBox"
+                             Grid.Column="0"
+                             Height="40"
+                             Padding="10,8"
+                             VerticalContentAlignment="Center"
+                             IsReadOnly="True"
+                             Text="Choose a video file..."/>
+                    <Button x:Name="BrowseButton"
+                            Grid.Column="1"
+                            Margin="10,0,0,0"
+                            Click="BrowseButton_Click">Browse...</Button>
+                </Grid>
+
+                <Grid Margin="0,22,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Margin="0,0,18,0">
+                        <TextBlock FontWeight="SemiBold" Margin="0,0,0,8">Screen Caps per minute</TextBlock>
+                        <Grid Width="100" Height="38" HorizontalAlignment="Left">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="22"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="FrequencyTextBox"
+                                     Grid.Column="0"
+                                     Height="38"
+                                     Padding="10,7"
+                                     Text="3"
+                                     PreviewTextInput="FrequencyTextBox_PreviewTextInput"
+                                     DataObject.Pasting="FrequencyTextBox_Pasting"/>
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Button Grid.Row="0"
+                                        Height="19"
+                                        Padding="0"
+                                        FontSize="9"
+                                        Content="▲"
+                                        ToolTip="Increase screen caps per minute"
+                                        Click="FrequencyIncreaseButton_Click"/>
+                                <Button Grid.Row="1"
+                                        Height="19"
+                                        Padding="0"
+                                        FontSize="9"
+                                        Content="▼"
+                                        ToolTip="Decrease screen caps per minute"
+                                        Click="FrequencyDecreaseButton_Click"/>
+                            </Grid>
+                        </Grid>
+                        <TextBlock Margin="0,5,0,0" FontSize="12" Foreground="#687186">Enter a whole number from 1 to 10.</TextBlock>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock FontWeight="SemiBold" Margin="0,0,0,8">Image size</TextBlock>
+                        <RadioButton x:Name="OriginalSizeRadioButton"
+                                     Content="Original video size"
+                                     IsChecked="True"
+                                     Margin="0,2,0,7"/>
+                        <RadioButton x:Name="HalfSizeRadioButton"
+                                     Content="Half original width and height"
+                                     Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="2" Margin="0,16,0,0" Padding="20" Background="White" CornerRadius="10">
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock x:Name="StatusTextBlock" FontWeight="SemiBold">Ready</TextBlock>
+                        <TextBlock x:Name="ProgressTextBlock" Margin="0,5,0,0" FontSize="12" Foreground="#687186" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Button x:Name="CancelButton"
+                                Margin="0,0,8,0"
+                                Visibility="Collapsed"
+                                IsEnabled="False"
+                                Click="CancelButton_Click">Cancel</Button>
+                        <Button x:Name="StartButton"
+                                Background="{StaticResource AccentBrush}"
+                                Foreground="White"
+                                BorderThickness="0"
+                                Click="StartButton_Click">Start capture</Button>
+                    </StackPanel>
+                </Grid>
+                <ProgressBar x:Name="CaptureProgressBar"
+                             Height="8"
+                             Margin="0,16,0,0"
+                             Minimum="0"
+                             Maximum="100"
+                             Visibility="Collapsed"/>
+                <Button x:Name="OpenFolderButton"
+                        HorizontalAlignment="Left"
+                        Margin="0,16,0,0"
+                        Click="OpenFolderButton_Click">Show caps folder</Button>
+            </StackPanel>
+        </Border>
+
+        <TextBlock Grid.Row="3"
+                   Margin="2,14,2,0"
+                   FontSize="12"
+                   Foreground="#687186"
+                   TextWrapping="Wrap">
+            FFmpeg must be installed and available on PATH. Screen caps are saved to the application's caps folder.
+        </TextBlock>
+    </Grid>
+</Window>

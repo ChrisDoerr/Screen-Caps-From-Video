@@ -43,6 +43,9 @@ artifacts/
 AppPackages/
 BundleArtifacts/
 
+# Generated screen caps
+caps/
+
 # IDEs and local tooling
 .idea/
 .vsconfig.user

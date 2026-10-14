@@ -2,7 +2,7 @@
 
 ## Overview
 
-ScreenCapsFromVideo is a Windows desktop application for extracting JPEG screenshots at regular intervals from a locally stored video. The application provides a simple WPF graphical interface and uses FFmpeg, which is assumed to be installed and available on the system `PATH`.
+ScreenCapsFromVideo is a Windows desktop application for extracting JPEG screen caps at regular intervals from a locally stored video. The application provides a simple WPF graphical interface and uses FFmpeg, which is assumed to be installed and available on the system `PATH`.
 
 ## Platform and technology
 
@@ -14,9 +14,9 @@ ScreenCapsFromVideo is a Windows desktop application for extracting JPEG screens
 ## User workflow
 
 1. Select a video file from the local filesystem.
-2. Choose how many screenshots to capture per minute.
-3. Choose whether to keep the video's original dimensions or scale screenshots to half width and half height.
-4. Select **Start** to begin extracting screenshots.
+2. Choose how many screen caps to capture per minute.
+3. Choose whether to keep the video's original dimensions or scale screen caps to half width and half height.
+4. Select **Start** to begin extracting screen caps.
 5. Monitor capture progress, when FFmpeg provides usable progress information.
 6. When capture completes successfully, select the button to open the output folder in Windows File Explorer.
 
@@ -30,31 +30,31 @@ ScreenCapsFromVideo is a Windows desktop application for extracting JPEG screens
 
 ### Capture frequency
 
-- Provide a numeric setting for screenshots per minute.
-- Default to **2 screenshots per minute**.
+- Provide a numeric setting for screen caps per minute.
+- Default to **3 screen caps per minute**.
 - Accept whole-number values from **1 through 10**, inclusive; reject or prevent values outside this range.
-- Convert the selected frequency to a capture interval in seconds using `60 / screenshots per minute`. For example, 2 per minute means one screenshot every 30 seconds.
+- Convert the selected frequency to a capture interval in seconds using `60 / screen caps per minute`. For example, 2 per minute means one screen cap every 30 seconds.
 - Capture frames at regular intervals across the video's runtime, without requesting frames beyond its duration.
 
 ### Image dimensions
 
 - Offer two choices:
   - **Original size** — preserve the video's original image dimensions.
-  - **Half size** — scale both image dimensions to half their original values while preserving the aspect ratio.
+  - **Half size** — scale both image dimensions to half their original values while preserving the aspect ratio. For odd dimensions, round down to the nearest whole pixel.
 - Default to **Original size**.
 
 ### Output
 
-- Save all screenshots in a `caps` directory under the application directory.
+- Save all screen caps in a `caps` directory under the application directory.
 - Create the directory automatically if it does not already exist.
-- Name each JPEG using the source video's filename (without its extension) and the screenshot's position in the video, formatted as a timestamp. For example: `ExampleVideo_00-01-30.jpg`.
-- Do not remove unrelated or previously generated files from the output directory. Avoid silently overwriting existing screenshots.
+- Name each JPEG using the source video's filename (without its extension) and the screen cap's position in the video, formatted as a timestamp. For example: `ExampleVideo_00-01-30.jpg`.
+- Do not remove unrelated or previously generated files from the output directory. Avoid silently overwriting existing screen caps.
 
 ### Capture progress and completion
 
 - Run FFmpeg without blocking the graphical interface.
 - Show a progress bar during capture when progress can be obtained from FFmpeg. If progress is unavailable, keep the interface responsive and communicate the capture state without presenting misleading progress.
-- On successful completion, show a button that opens the `caps` directory in Windows File Explorer.
+- Show a button to open the `caps` directory in Windows File Explorer whenever capture is not running. Create the directory if needed when the button is clicked.
 - Report FFmpeg failures and unsuccessful captures to the user; do not present the output-folder action as a successful completion.
 
 ## Operational considerations
@@ -68,7 +68,7 @@ ScreenCapsFromVideo is a Windows desktop application for extracting JPEG screens
 
 - A user can select a local video and start a capture using the default settings.
 - Frequencies 1 and 10 are accepted; values below 1, above 10, and non-integer values are not accepted.
-- At 2 screenshots per minute, the requested capture interval is 30 seconds.
+- At 2 screen caps per minute, the requested capture interval is 30 seconds.
 - The original-size option preserves input dimensions, and the half-size option outputs images at half width and height.
 - The application creates and uses its application-relative `caps` directory, and generated filenames include both the video name and the frame's position in the video.
 - The interface remains responsive during capture and reports progress when available.
