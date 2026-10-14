@@ -9,4 +9,11 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="ScreenCapsFromVideo.Tests\**\*.cs" />
+    <Page Remove="ScreenCapsFromVideo.Tests\**\*.xaml" />
+    <EmbeddedResource Remove="ScreenCapsFromVideo.Tests\**\*" />
+    <None Remove="ScreenCapsFromVideo.Tests\**\*" />
+  </ItemGroup>
+
 </Project>

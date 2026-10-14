@@ -7,7 +7,7 @@ namespace ScreenCapsFromVideo;
 
 public sealed class FfmpegCaptureService
 {
-    public string OutputDirectory => Path.Combine(AppContext.BaseDirectory, "caps");
+    public string OutputDirectory => CaptureLogic.ResolveOutputDirectory();
 
     private static readonly Regex DurationPattern = new(
         @"Duration:\s*(\d+):(\d{2}):(\d{2}(?:\.\d+)?)",
@@ -30,7 +30,7 @@ public sealed class FfmpegCaptureService
             throw new FileNotFoundException("The selected video file could not be found.", inputPath);
         }
 
-        if (screenCapsPerMinute is < 1 or > 10)
+        if (!CaptureLogic.IsScreenCapsPerMinuteValid(screenCapsPerMinute))
         {
             throw new ArgumentOutOfRangeException(nameof(screenCapsPerMinute), "Capture frequency must be between 1 and 10 screen caps per minute.");
         }
@@ -60,7 +60,7 @@ public sealed class FfmpegCaptureService
             processStartInfo.ArgumentList.Add("-i");
             processStartInfo.ArgumentList.Add(inputPath);
             processStartInfo.ArgumentList.Add("-vf");
-            processStartInfo.ArgumentList.Add(BuildVideoFilter(screenCapsPerMinute, halfSize));
+            processStartInfo.ArgumentList.Add(CaptureLogic.BuildVideoFilter(screenCapsPerMinute, halfSize));
             processStartInfo.ArgumentList.Add("-fps_mode");
             processStartInfo.ArgumentList.Add("vfr");
             processStartInfo.ArgumentList.Add("-q:v");
@@ -138,7 +138,7 @@ public sealed class FfmpegCaptureService
             var videoName = Path.GetFileNameWithoutExtension(inputPath);
             for (var index = 0; index < stagedImages.Length; index++)
             {
-                var baseName = $"{videoName}_{FormatTimestamp(frameTimestamps[index])}";
+                var baseName = $"{videoName}_{CaptureLogic.FormatTimestamp(frameTimestamps[index])}";
                 MoveWithoutOverwriting(stagedImages[index], outputDirectory, baseName);
             }
 
@@ -151,13 +151,6 @@ public sealed class FfmpegCaptureService
                 Directory.Delete(stagingDirectory, recursive: true);
             }
         }
-    }
-
-    private static string BuildVideoFilter(int screenCapsPerMinute, bool halfSize)
-    {
-        var intervalSeconds = (60d / screenCapsPerMinute).ToString("0.###############", CultureInfo.InvariantCulture);
-        var filter = $"select=isnan(prev_selected_t)+gte(t-prev_selected_t\\,{intervalSeconds}),showinfo";
-        return halfSize ? $"{filter},scale=trunc(iw/2):trunc(ih/2)" : filter;
     }
 
     private static async Task ReadProgressAsync(
@@ -226,24 +219,9 @@ public sealed class FfmpegCaptureService
         }
     }
 
-    private static string FormatTimestamp(TimeSpan timestamp)
-    {
-        var totalHours = (long)timestamp.TotalHours;
-        return string.Create(
-            CultureInfo.InvariantCulture,
-            $"{totalHours:00}-{timestamp.Minutes:00}-{timestamp.Seconds:00}");
-    }
-
     private static void MoveWithoutOverwriting(string sourcePath, string outputDirectory, string baseName)
     {
-        var destination = Path.Combine(outputDirectory, $"{baseName}.jpg");
-        var suffix = 2;
-        while (File.Exists(destination))
-        {
-            destination = Path.Combine(outputDirectory, $"{baseName} ({suffix}).jpg");
-            suffix++;
-        }
-
+        var destination = CaptureLogic.GetNextAvailablePath(outputDirectory, baseName, ".jpg");
         File.Move(sourcePath, destination);
     }
 }
