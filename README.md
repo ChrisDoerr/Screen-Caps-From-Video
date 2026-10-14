@@ -84,4 +84,4 @@ ExampleVideo_00-01-30.jpg
 
 ## License
 
-This project is provided as-is for local desktop use.
+This project is licensed under the [MIT License](LICENSE). See the license file for details.
